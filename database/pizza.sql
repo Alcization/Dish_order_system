@@ -20,7 +20,10 @@ CREATE TABLE `account` (
 );
 -- ! Rang buoc ve do dai cua password phai lon hon hoac bang 8, gom ca chu va so
 ALTER TABLE `account`
-    ADD CONSTRAINT check_password CHECK (LENGTH(password) >= 8);
+    ADD CONSTRAINT check_length_password CHECK (LENGTH(password) >= 8);
+-- ! Rang buoc ve password phai la co it nhat 1 chu in hoa, 1 chu in thuong va 1 so
+ALTER TABLE `account`
+    ADD CONSTRAINT check_valid_password CHECK (password REGEXP '^[a-zA-Z0-9]+$');
 
 -- Table structure for table `nha hang` 
 CREATE TABLE `restaurant` (
