@@ -20,10 +20,11 @@ CREATE TABLE `account` (
 );
 -- ! Rang buoc ve do dai cua password phai lon hon hoac bang 8, gom ca chu va so
 ALTER TABLE `account`
-    ADD CONSTRAINT check_length_password CHECK (LENGTH(password) >= 8);
+    ADD CONSTRAINT account_check_length_password CHECK (LENGTH(password) >= 8);
 -- ! Rang buoc ve password phai la co it nhat 1 chu in hoa, 1 chu in thuong va 1 so
 ALTER TABLE `account`
-    ADD CONSTRAINT check_valid_password CHECK (password REGEXP '^[a-zA-Z0-9]+$');
+    ADD CONSTRAINT account_check_valid_password CHECK (password REGEXP '^[a-zA-Z0-9]+$');
+
 
 -- Table structure for table `nha hang` 
 CREATE TABLE `restaurant` (
@@ -43,12 +44,14 @@ CREATE TABLE `restaurant_image` (
     PRIMARY KEY (`restaurant_id`, `restaurant_image_url`)
 );
 
+
 -- Table structure for table `khach hang`
 CREATE TABLE `customer` (
     `customer_id` int(10) NOT NULL,
     `customer_first_name` varchar(255) NOT NULL,
     `customer_last_name` varchar(255) NOT NULL,
-    `phone_number` int(10) NOT NULL,
+-- ! Sua phone_number tu INT(10) thanh VARCHAR(10)
+    `phone_number` varchar(10) NOT NULL,
     `email` varchar(255) NOT NULL,
     `points` int(10),
     CONSTRAINT fk_customer_account FOREIGN KEY (`customer_id`) REFERENCES `account`(`account_id`) ON DELETE CASCADE,
@@ -56,13 +59,14 @@ CREATE TABLE `customer` (
 );
 -- ! Rang buoc ve diem tich luy cua khach hang phai lon hon hoac bang 0
 ALTER TABLE `customer`
-    ADD CONSTRAINT check_point CHECK (points >= 0);
+    ADD CONSTRAINT customer_check_point CHECK (points >= 0);
 -- ! Rang buoc ve so dien thoai cua khach hang phai dung dinh dang
 ALTER TABLE `customer`
-    ADD CONSTRAINT check_valid_phonenumber CHECK (LENGTH(phone_number) = 10);
+    ADD CONSTRAINT customer_check_valid_phonenumber CHECK (LENGTH(phone_number) = 10);
 -- ! Rang buoc ve email cua khach hang phai dung dinh dang
 ALTER TABLE `customer`
-    ADD CONSTRAINT check_valid_email CHECK (email LIKE '%_@_%._%');
+    ADD CONSTRAINT customer_check_valid_email CHECK (email LIKE '%_@_%._%');
+
 
 -- Table structure for table `mon an`
 CREATE TABLE `food` (
@@ -74,7 +78,7 @@ CREATE TABLE `food` (
 );
 -- ! Rang buoc ve gia cua mon an phai lon hon 0
 ALTER TABLE `food`
-    ADD CONSTRAINT check_foodprice CHECK (food_price > 0);
+    ADD CONSTRAINT food_check_foodprice CHECK (food_price > 0);
 
 -- Table structure for table `anh mon an`
 CREATE TABLE `food_image` (
@@ -95,7 +99,9 @@ CREATE TABLE `manage_food` (
 );
 -- ! Rang buoc ve gia ban cua mon an phai lon hon 0
 ALTER TABLE `manage_food`
-    ADD CONSTRAINT check_pricesell CHECK (price_sell > 0);
+    ADD CONSTRAINT manage_food_check_pricesell CHECK (price_sell > 0);
+
+
 
 -- Table structure for table `danh gia mon an`
 CREATE TABLE `user_review` (
@@ -110,7 +116,9 @@ CREATE TABLE `user_review` (
 );
 -- ! Rang buoc rating cua danh gia mon an phai la 1, 2, 3, 4 hoac 5 sao
 ALTER TABLE `user_review`
-    ADD CONSTRAINT check_rating CHECK (rating = 1 OR rating = 2 OR rating = 3 OR rating = 4 OR rating = 5);
+    ADD CONSTRAINT user_review_check_rating CHECK (rating = 1 OR rating = 2 OR rating = 3 OR rating = 4 OR rating = 5);
+
+
 
 -- Table structure for table `ma giam gia`
 CREATE TABLE `discount` (
@@ -123,7 +131,7 @@ CREATE TABLE `discount` (
 );
 -- ! Rang buoc ve trang thai cua ma giam gia phai la 0 hoac 1
 ALTER TABLE `discount`
-    ADD CONSTRAINT check_statususe CHECK (status_use = 0 OR status_use = 1);
+    ADD CONSTRAINT discount_check_statususe CHECK (status_use = 0 OR status_use = 1);
 
 -- Table structure for table `ma giam gia theo phan tram`
 CREATE TABLE `discount_on_percent` (
@@ -134,7 +142,7 @@ CREATE TABLE `discount_on_percent` (
 );
 -- ! Rang buoc muc giam gia toi da cua ma giam gia theo phan tram la 40%
 ALTER TABLE `discount_on_percent`
-    ADD CONSTRAINT check_percent CHECK (percent >= 0 AND percent <= 40);
+    ADD CONSTRAINT discount_check_percent CHECK (percent >= 0 AND percent <= 40);
 
 -- Table structure for table `ma giam gia theo so tien`
 CREATE TABLE `discount_on_number` (
@@ -145,9 +153,10 @@ CREATE TABLE `discount_on_number` (
 );
 -- ! Rang buoc gia tri giam gia toi thieu cua ma giam gia theo so tien lon hon 0
 ALTER TABLE `discount_on_number`
-    ADD CONSTRAINT check_discountnumber CHECK (discount_number > 0);
+    ADD CONSTRAINT discount_check_discountnumber CHECK (discount_number > 0);
 
 -- Table structure for table `ma giam gia hien co`
+-- Phuc vu cho luu tru va doi diem thanh ma giam gia
 CREATE TABLE `customer_discounts` (
     `customer_id` int(10) NOT NULL,
     `discount_id` int(10) NOT NULL,
@@ -159,10 +168,10 @@ CREATE TABLE `customer_discounts` (
 );
 -- ! Rang buoc ve loai ma giam gia phai la percent hoac number
 ALTER TABLE `customer_discounts`
-    ADD CONSTRAINT check_typediscount CHECK (type_discount = 'percent' OR type_discount = 'number');
+    ADD CONSTRAINT customer_discount_check_typediscount CHECK (type_discount = 'percent' OR type_discount = 'number');
 -- ! Rang buoc ve ngay het han cua ma giam gia phai lon hon ngay 01/12/2024
 ALTER TABLE `customer_discounts`
-    ADD CONSTRAINT check_expireddate CHECK (expired_date > '2024-12-01');
+    ADD CONSTRAINT customer_discount_check_expireddate CHECK (expired_date > '2024-12-01');
 
 -- Table structure for table `tao ma giam gia`
 CREATE TABLE `discount_creator` (
@@ -173,18 +182,37 @@ CREATE TABLE `discount_creator` (
     PRIMARY KEY (`restaurant_id`,`discount_id`)
 );
 
+-- Table structure for table `hoa don thanh toan`
+CREATE TABLE `payment_order` (
+    `bill_id` int(10) NOT NULL AUTO_INCREMENT,
+    `payment_status` int(1) NOT NULL, -- ! 0: unpaid, 1: paid
+    PRIMARY KEY (`bill_id`)
+);
+-- ! Rang buoc ve trang thai cua hoa don phai la 0 hoac 1
+ALTER TABLE `payment_order`
+    ADD CONSTRAINT payment_order_check_paymentstatus CHECK (payment_status = 0 OR payment_status = 1);
+
 -- Table structure for table `don hang`
 CREATE TABLE `order` (
     `order_id` int(10) NOT NULL AUTO_INCREMENT,
     `customer_id` int(10) NOT NULL,
     `order_status` int(1) NOT NULL, -- ! 0: waiting, 1: processing, 2: delivering, 3: delivered
-    `address_delivery` varchar(255) NOT NULL,
+    `bill_id` int(10) NOT NULL,
+    `discount_id` int(10),
+    `address_delivery` varchar(255) NOT NULL DEFAULT 'N/A',
+    `final_price` int(10) NOT NULL DEFAULT 0,
+    `order_date` date NOT NULL,
     CONSTRAINT fk_order_customer FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`) ON DELETE CASCADE,
+    CONSTRAINT fk_order_bill FOREIGN KEY (`bill_id`) REFERENCES `payment_order`(`bill_id`) ON DELETE CASCADE,
+    CONSTRAINT fk_createbill_discount FOREIGN KEY (`discount_id`) REFERENCES `discount`(`discount_id`) ON DELETE CASCADE,
     PRIMARY KEY (`order_id`)
 );
 -- ! Rang buoc ve trang thai cua don hang phai la 0, 1, 2 hoac 3
 ALTER TABLE `order`
-    ADD CONSTRAINT check_orderstatus CHECK (order_status = 0 OR order_status = 1 OR order_status = 2 OR order_status = 3);
+    ADD CONSTRAINT order_check_orderstatus CHECK (order_status = 0 OR order_status = 1 OR order_status = 2 OR order_status = 3);
+-- ! Rang buoc ve gia tri cuoi cung cua don hang phai lon hon 0
+ALTER TABLE `order`
+    ADD CONSTRAINT order_check_finalprice CHECK (final_price > 0);
 
 -- Table structure for table `nhan vien giao hang`
 CREATE TABLE `shipping_employee` (
@@ -197,7 +225,7 @@ CREATE TABLE `shipping_employee` (
 );
 -- ! Rang buoc ve so dien thoai cua nhan vien giao hang phai dung dinh dang
 ALTER TABLE `shipping_employee`
-    ADD CONSTRAINT check_valid_phonenumber CHECK (LENGTH(employee_phone) = 10);
+    ADD CONSTRAINT shipper_check_valid_phonenumber CHECK (LENGTH(employee_phone) = 10);
 
 -- Table structure for table `nguoi nhan`
 CREATE TABLE `receiver` (
@@ -210,35 +238,22 @@ CREATE TABLE `receiver` (
 );
 -- ! Rang buoc ve so dien thoai cua nguoi nhan phai dung dinh dang
 ALTER TABLE `receiver`
-    ADD CONSTRAINT check_valid_phonenumber CHECK (LENGTH(receiver_phone) = 10);
+    ADD CONSTRAINT receiver_check_valid_phonenumber CHECK (LENGTH(receiver_phone) = 10);
 
--- Table structure for table `hoa don thanh toan`
-CREATE TABLE `payment_bill` (
-    `bill_id` int(10) NOT NULL AUTO_INCREMENT,
-    `payment_status` int(1) NOT NULL, -- ! 0: unpaid, 1: paid
-    PRIMARY KEY (`bill_id`)
-);
--- ! Rang buoc ve trang thai cua hoa don phai la 0 hoac 1
-ALTER TABLE `payment_bill`
-    ADD CONSTRAINT check_paymentstatus CHECK (payment_status = 0 OR payment_status = 1);
-
--- Table structure for table `tao hoa don`
-CREATE TABLE `creat_bill` (
+-- Table structure for table `tao don hang`
+CREATE TABLE `creat_order` (
     `order_id` int(10) NOT NULL,
-    `bill_id` int(10) NOT NULL,
     `food_id` int(10) NOT NULL,
-    `discount_id` int(10) NOT NULL,
-    `total_price` int(10) NOT NULL,
+    `quantity` int(10) NOT NULL,
+    `temp_price` int(10) NOT NULL,
     `create_date` date NOT NULL,
     CONSTRAINT fk_createbill_order FOREIGN KEY (`order_id`) REFERENCES `order`(`order_id`) ON DELETE CASCADE,
-    CONSTRAINT fk_createbill_bill FOREIGN KEY (`bill_id`) REFERENCES `payment_bill`(`bill_id`) ON DELETE CASCADE,
     CONSTRAINT fk_createbill_food FOREIGN KEY (`food_id`) REFERENCES `food`(`food_id`) ON DELETE CASCADE,
-    CONSTRAINT fk_createbill_discount FOREIGN KEY (`discount_id`) REFERENCES `discount`(`discount_id`) ON DELETE CASCADE,
-    PRIMARY KEY (`order_id`, `bill_id`, `food_id`, `discount_id`)
+    PRIMARY KEY (`order_id`, `food_id`)
 );
 -- ! Rang buoc ve gia tri thanh toan phai lon hon 0
-ALTER TABLE `creat_bill`
-    ADD CONSTRAINT check_totalprice CHECK (total_price > 0);
+ALTER TABLE `creat_order`
+    ADD CONSTRAINT creat_order_check_totalprice CHECK (temp_price > 0);
 -- ! Rang buoc ve ngay tao hoa don phai lon hon ngay 01/12/2024
-ALTER TABLE `creat_bill`
-    ADD CONSTRAINT check_createdate CHECK (create_date > '2024-12-01');
+ALTER TABLE `creat_order`
+    ADD CONSTRAINT creat_order_check_createdate CHECK (create_date > '2024-12-01');

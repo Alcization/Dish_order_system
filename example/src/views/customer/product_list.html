@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">      
+        <title>Product_list</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,
+        100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fjalla+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Bayon' rel='stylesheet'>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script src="getAllProduct.js"></script>
+        <style>
+            /*Footer*/
+        footer {
+            display: flex;
+            flex-direction: column;
+        }
+        .footer_logo {
+            margin-top: 25px;
+            margin-left: 12.5vw;
+            vertical-align: middle;
+        }
+        .logo_shape {
+            height: 40px;
+            vertical-align: middle;
+        }
+        .logo_letter {
+            height: 60px;
+            vertical-align: middle;
+        }
+        .footer_content {
+            display: flex;
+            flex-direction: row;
+        }
+        table td{
+            width: 15vw;
+            height: 30px;
+            font-size: 14px;
+        }
+        table {
+            margin-top: 20px;
+        }
+        th {
+            padding-bottom: 5px;
+        }
+        td {
+            color: #888888;
+        }
+        table th {
+            text-align: left;
+            font-size: 16px;
+        }
+        .contact > h3{
+            font-size: 16px;
+        }
+        .contact > input {
+            height: 40px;
+            width: 25vw;
+            border: 2px solid #bbbbbb;
+            border-radius: 7px;
+            padding-left: 15px;
+        }
+        .contact > h3:first-child {
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+        .contact > h3:last-child {
+            margin-top: 20px;
+        }
+        .footer_content {
+            justify-content: center;
+            padding-bottom: 5vw;
+        }
+        .footer_rect {
+            width: 100%;
+            height: 30px;
+            background-color: #F15E2C;
+        }
+        </style>
+    </head>
+    <body class="max-w-[1500px] mx-auto">
+        <header class="flex flex-row h-[65px] sticky top-0 z-50 bg-white shadow-md">
+            <div class="ml-5 mr-96"> 
+                <img src="img_product_list/logo.png" alt="logo">
+            </div>
+            <div class="flex flex-row space-x-14">
+                <div class="font-bold text-sm font-[BeVietnam] flex items-center justify-center">
+                    <a href="#">SẢN PHẨM</a>
+                </div>
+                <div class="font-bold text-sm font-[BeVietnam] flex items-center justify-center">
+                    <a href="#">SALE OFF</a>
+                </div>
+                <div class="font-bold text-sm font-[BeVietnam] flex items-center justify-center">
+                    <a href="#">TIN TỨC</a>
+                </div>
+                <div class="font-bold text-sm font-[BeVietnam] flex items-center justify-center">
+                    <a href="#">GIỚI THIỆU</a>
+                </div>
+            </div>
+            <div class=" flex flex-row items-center justify-center pr-1">
+                <div class="ml-96">
+                    <img src="img_product_list/icon_search.png" alt="icon">
+                </div>
+                <div class="ml-4">
+                    <img src="img_product_list/icon_ava.png" alt="icon">
+                </div>
+            </div>
+        </header>
+        <div class="flex flex-row">
+            <div class="space-y-16">
+                <div class="font-bold text-2xl" style="padding-left: 180px;">SẢN PHẨM</div>
+                <div class="text-base" style="padding-left: 180px;">
+                    <div style="color: #F15E2C;">Dòng Sản Phẩm</div>
+                    <!-- ! Category show here -->
+                    <div id="page-content-category"  style="padding-left: 37px;">
+
+                    </div>
+                </div>
+                <div class="text-base" style="padding-left: 180px;">
+                    <div style="color: #F15E2C;">Trạng thái</div>
+                    <div style="padding-left: 37px;"><br>Limited Edition<br>Sale off<br>Pre-order<br>New Arrival</div>
+                </div>
+                <div class="text-base" style="padding-left: 180px;">
+                    <div style="color: #F15E2C;">Giá</div>
+                    <div style="padding-left: 37px;"><br>> 600k<br>500k - 599k<br>400k - 499k<br>300k - 399k<br>200k -299k<br> < 200k</div>
+                </div>
+                <div class="text-base" style="padding-left: 180px;">
+                    <div style="color: #F15E2C;">Màu sắc</div>
+                    <div style="padding-left: 37px; padding-top: 26px;"><img src="img_product_list/color.png" alt="color"></div>
+                </div>
+            </div>
+            
+            <!-- ! Product show here -->
+            <div class="grid grid-cols-3 gap-8 pl-11" id="page-content-product" style="padding-top: 100px;">
+
+
+            </div>
+        </div>
+        <div class="flex flex-row items-center justify-center space-x-4 pt-8">
+            <img src="img_product_list/Vector1.png" alt="pre">
+            <img src="img_product_list/bt1.png" alt="bt1">
+            <img src="img_product_list/bt2.png" alt="bt2">
+            <img src="img_product_list/bt3.png" alt="bt3">
+            <img src="img_product_list/Vector2.png" alt="next">
+        </div>
+        <footer>
+            <div class="footer_logo flex flex-row items-center">
+                <img src="img_product_list/Logo_shape.png" alt="logo_shape" class="logo_shape">
+                <img src="img_product_list/logo.png" alt="logo_letter" class="logo_letter">
+            </div>
+        
+            <div class="footer_content">
+                <table>
+                    <tr>
+                        <th>SẢN PHẨM</th>
+                        <th>VỀ ANANAS</th>
+                        <th>HỖ TRỢ</th>
+                    </tr>
+        
+                    <tr>
+                        <td>Giày nam</td>
+                        <td>Tuyển dụng</td>
+                        <td>FAQs</td>
+                    </tr>
+        
+                    <tr>
+                        <td>Giày nữ</td>
+                        <td>Giới thiệu</td>
+                        <td>Bảo mật thông tin</td>
+                    </tr>
+        
+                    <tr>
+                        <td>Thời trang & Phụ kiện</td>
+                        <td></td>
+                        <td>Chính sách chung</td>
+                    </tr>
+        
+                    <tr>
+                        <td>Sale-off</td>
+                        <td></td>
+                        <td>Tra cứu đơn hàng</td>
+                    </tr>
+                </table>
+        
+                <div class="contact">
+                    <h3>LIÊN HỆ</h3>
+                    <input type="text" placeholder="Email">
+        
+                    <h3>HỆ THỐNG CỬA HÀNG
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+                            <path d="M0.467209 12.0185C0.172957 12.3101 0.172957 12.7827 0.467209 13.0742C0.761461 13.3658 1.23854 13.3658 1.53279 13.0742L0.467209 12.0185ZM12.7535 1.64824C12.7535 1.23596 12.4161 0.901737 12 0.901736L5.21868 0.901736C4.80254 0.901736 4.4652 1.23596 4.4652 1.64824C4.4652 2.06052 4.80254 2.39474 5.21868 2.39474H11.2465V8.36677C11.2465 8.77905 11.5839 9.11328 12 9.11328C12.4161 9.11328 12.7535 8.77905 12.7535 8.36677L12.7535 1.64824ZM1.53279 13.0742L12.5328 2.1761L11.4672 1.12038L0.467209 12.0185L1.53279 13.0742Z" fill="#F15E2C"/>
+                        </svg>
+                    </h3>
+                </div>
+            </div>
+        
+            <div class="footer_rect"></div>
+        </footer>
+
+
+    </body>
+</html>
