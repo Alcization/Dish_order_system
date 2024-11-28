@@ -43,6 +43,7 @@
 
                     if ($db_password && $mk === $db_password) { 
                         $_SESSION["loged"] = true;
+			$_SESSION["account_id"] = $account_id; // Lưu account_id vào session
                         setcookie("success", "Đăng nhập thành công!", time()+3600, "/", "", false, true);
                         $rows = mysqli_query($connect,"SELECT * FROM restaurant WHERE restaurant_id IN (SELECT account_id FROM account WHERE user_name = '$tk' and password = '$mk')");
                         $count = mysqli_num_rows($rows);
