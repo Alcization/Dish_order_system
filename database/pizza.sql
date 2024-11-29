@@ -192,6 +192,10 @@ CREATE TABLE `payment_order` (
 ALTER TABLE `payment_order`
     ADD CONSTRAINT payment_order_check_paymentstatus CHECK (payment_status = 0 OR payment_status = 1);
 
+
+
+
+
 -- Table structure for table `don hang`
 CREATE TABLE `order` (
     `order_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -214,6 +218,9 @@ ALTER TABLE `order`
 ALTER TABLE `order`
     ADD CONSTRAINT order_check_finalprice CHECK (final_price > 0);
 
+
+
+
 -- Table structure for table `nhan vien giao hang`
 CREATE TABLE `shipping_employee` (
     `employee_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -226,6 +233,10 @@ CREATE TABLE `shipping_employee` (
 -- ! Rang buoc ve so dien thoai cua nhan vien giao hang phai dung dinh dang
 ALTER TABLE `shipping_employee`
     ADD CONSTRAINT shipper_check_valid_phonenumber CHECK (LENGTH(employee_phone) = 10);
+
+
+
+
 
 -- Table structure for table `nguoi nhan`
 CREATE TABLE `receiver` (
@@ -240,8 +251,12 @@ CREATE TABLE `receiver` (
 ALTER TABLE `receiver`
     ADD CONSTRAINT receiver_check_valid_phonenumber CHECK (LENGTH(receiver_phone) = 10);
 
+
+
+
+
 -- Table structure for table `tao don hang`
-CREATE TABLE `creat_order` (
+CREATE TABLE `create_order` (
     `order_id` int(10) NOT NULL,
     `food_id` int(10) NOT NULL,
     `quantity` int(10) NOT NULL,
@@ -252,8 +267,8 @@ CREATE TABLE `creat_order` (
     PRIMARY KEY (`order_id`, `food_id`)
 );
 -- ! Rang buoc ve gia tri thanh toan phai lon hon 0
-ALTER TABLE `creat_order`
+ALTER TABLE `create_order`
     ADD CONSTRAINT creat_order_check_totalprice CHECK (temp_price > 0);
 -- ! Rang buoc ve ngay tao hoa don phai lon hon ngay 01/12/2024
-ALTER TABLE `creat_order`
+ALTER TABLE `create_order`
     ADD CONSTRAINT creat_order_check_createdate CHECK (create_date > '2024-12-01');
