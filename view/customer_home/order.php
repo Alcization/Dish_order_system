@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finish_order'])) {
 <nav class="navbar position-relative navbar-expand-sm navbar-light px-4" style="background-color: #e8e3c5;">
   <div class="container-fluid gap-5">
     <!-- Title and Logo -->
-    <a class="navbar-brand" href="">
+    <a class="navbar-brand" href="/view/customer_home/home.php">
       <img src="../image/logo.jpg" alt="logo" style="width: 3rem;">
       <span class="ms-4" style="font-size: 1.5rem;">Pizza DB</span>
     </a>
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finish_order'])) {
     <div class="navmenu justify-content-center navbar-collapse gap-5">
       <ul class="navbar-nav gap-5">
         <li class="nav-item">
-          <a class="nav-link text-uppercase text-black fw-bold" href="home.php">Trang chủ</a>
+          <a class="nav-link text-uppercase text-black fw-bold" href="/view/customer_home/home.php">Trang chủ</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-uppercase text-black fw-bold" href="">Menu</a>

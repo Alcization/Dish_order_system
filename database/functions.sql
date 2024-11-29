@@ -58,6 +58,9 @@ BEGIN
                 WHERE discount_id = discountId;
                 -- Giảm giá theo số tiền cụ thể
                 SET total = total - discountValue;
+                IF total < 0 THEN
+                    SET total = 0;
+                END IF;
             END IF;
         END IF;
     END IF;
@@ -74,6 +77,7 @@ BEGIN
     DECLARE done INT DEFAULT FALSE;
     DECLARE price INT;
     DECLARE total INT DEFAULT 0;
+    DECLARE temp INT DEFAULT 0;
     DECLARE discountType VARCHAR(20);
     DECLARE discountValue DECIMAL(10,2);
     DECLARE discountValid BOOLEAN;
@@ -93,13 +97,17 @@ BEGIN
         SET total = total + price;
     END LOOP;
     CLOSE cur;
-    
-    -- Áp dụng mã giảm giá
-    SET total = apply_discount(total, customerId, discountID)
 
-    -- Đảm bảo tổng không âm
-    IF total < 0 THEN
-        SET total = 0;
+    SET temp = apply_discount(total, customerId, discountID);
+    -- TODO Áp dụng mã giảm giá, quy ước mã lỗi -1: không có mã giảm giá, -2: mã giảm giá không hợp lệ
+    IF temp = -1 THEN 
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Không có mã giảm giá được áp dụng';
+    ELSEIF temp = -2 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Mã giảm giá không hợp lệ';
+    ELSE
+        SET total = temp;
     END IF;
 
     -- Cập nhật giá trị cuối cùng vào bảng 'order'

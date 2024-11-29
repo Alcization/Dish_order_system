@@ -28,7 +28,7 @@
                         <a class="nav-link text-uppercase text-black fw-bold" href="">Menu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Đơn hàng</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="/view/customer_home/order.php">Đơn hàng</a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
     
 
     <!-- Body -->
-    <section style="min-height: 40.6rem;">
+    <section style="min-height: 40.6rem; max-width: 120rem">
         <div class="flex-container">
             <div class="flex-item-left">
                 <div class="promotion_text">
