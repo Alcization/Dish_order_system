@@ -26,7 +26,7 @@
                         <a class="nav-link text-uppercase text-black fw-bold" href="">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Món ăn</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_qlma.php">Món ăn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="">Người dùng</a>

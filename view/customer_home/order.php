@@ -122,10 +122,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finish_order'])) {
     <div class="navmenu justify-content-center navbar-collapse gap-5">
       <ul class="navbar-nav gap-5">
         <li class="nav-item">
-          <a class="nav-link text-uppercase text-black fw-bold" href="/view/customer_home/home.php">Trang chủ</a>
+          <a class="nav-link text-uppercase text-black fw-bold" href="home.php">Trang chủ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-uppercase text-black fw-bold" href="">Menu</a>
+          <a class="nav-link text-uppercase text-black fw-bold" href="menu.php">Menu</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-uppercase text-black fw-bold" href="order.php">Đơn hàng</a>
