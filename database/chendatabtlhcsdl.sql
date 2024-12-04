@@ -242,7 +242,7 @@ VALUES
 
 
      
-INSERT INTO `creat_order` (`order_id`, `food_id`, `quantity`, `temp_price`, `create_date`) 
+INSERT INTO `creat_order` (`order_id`, `food_id`, `quantity`, `temp_price`, `creat_date`) 
 VALUES
 (1, 1, 2, 300000, '2025-01-01'),
 (1, 2, 1, 120000, '2025-01-01'),

@@ -256,19 +256,19 @@ ALTER TABLE `receiver`
 
 
 -- Table structure for table `tao don hang`
-CREATE TABLE `create_order` (
+CREATE TABLE `creat_order` (
     `order_id` int(10) NOT NULL,
     `food_id` int(10) NOT NULL,
     `quantity` int(10) NOT NULL,
     `temp_price` int(10) NOT NULL,
-    `create_date` date NOT NULL,
+    `creat_date` date NOT NULL,
     CONSTRAINT fk_createbill_order FOREIGN KEY (`order_id`) REFERENCES `order`(`order_id`) ON DELETE CASCADE,
     CONSTRAINT fk_createbill_food FOREIGN KEY (`food_id`) REFERENCES `food`(`food_id`) ON DELETE CASCADE,
     PRIMARY KEY (`order_id`, `food_id`)
 );
 -- ! Rang buoc ve gia tri thanh toan phai lon hon 0
-ALTER TABLE `create_order`
+ALTER TABLE `creat_order`
     ADD CONSTRAINT creat_order_check_totalprice CHECK (temp_price > 0);
 -- ! Rang buoc ve ngay tao hoa don phai lon hon ngay 01/12/2024
-ALTER TABLE `create_order`
-    ADD CONSTRAINT creat_order_check_createdate CHECK (create_date > '2024-12-01');
+ALTER TABLE `creat_order`
+    ADD CONSTRAINT creat_order_check_createdate CHECK (creat_date > '2024-12-01');

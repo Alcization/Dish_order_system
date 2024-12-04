@@ -74,7 +74,7 @@
     </div>
   </nav>
 
-  <div class="container mt-4">
+  <div class="container mt-4" style="min-height: 27.2rem;">
     <h2 class="text-center">Đơn hàng chưa được đánh giá</h2>
     <table class="table table-bordered mt-4">
       <thead class="table-light">
