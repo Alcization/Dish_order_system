@@ -96,8 +96,8 @@
             echo "<td>" . $row['final_price'] . "</td>";
             echo "<td>" . $row['address_delivery'] . "</td>";
             echo "<td>
-                  <a href='rating.php?order_id=" . $row['order_id'] . "' class='btn btn-success'>Đánh giá</a>
-                </td>";
+                    <a href='rating-detail.php?order_id=" . $row['order_id'] . "' class='btn btn-success'>Đánh giá</a>
+                  </td>";
             echo "</tr>";
           }
         } else {
