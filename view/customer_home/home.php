@@ -25,10 +25,10 @@
                         <a class="nav-link text-uppercase text-black fw-bold" href="">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Menu</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="menu.php">Menu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="/view/customer_home/order.php">Đơn hàng</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="order.php">Đơn hàng</a>
                     </li>
                 </ul>
             </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="promotion_button_container">
                     <button class="promotion_button">
-                        <a href="" class="login">Đặt hàng ngay</a>
+                        <a href="menu.php" class="login">Đặt hàng ngay</a>
                     </button>
                 </div>
 
