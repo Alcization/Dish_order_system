@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if (!isset($_SESSION['account_id'])):
+        header('Location: ../index.php');
+    endif;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +22,6 @@
 <body>
 
   <?php
-  session_start();
   $connect = mysqli_connect('localhost', 'root', '', 'pizza');
   if (!$connect) {
     die("Connection failed: " . mysqli_connect_error());
@@ -67,9 +74,11 @@
       </div>
       <!-- Logout Bar -->
       <div class="navmenu justify-content-end navbar-collapse col-lg-1 position-relative">
-        <button class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
-          <a href="../index.php" class="login">Đăng xuất</a>
-        </button>
+          <form action="../logout.php" method="post"> 
+              <button type="submit" class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
+                  Đăng xuất
+              </button>
+          </form> 
       </div>
     </div>
   </nav>

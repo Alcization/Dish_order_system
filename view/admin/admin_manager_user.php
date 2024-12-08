@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if (!isset($_SESSION['admin'])):
+        header('Location: ../index.php');
+    endif;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,20 +31,28 @@
             <div class="navmenu justify-content-center navbar-collapse gap-5">
                 <ul class="navbar-nav gap-5">
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Trang chủ</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_user.php">Người dùng</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_qlma.php">Món ăn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Người dùng</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_point.php">Điểm thưởng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_review.php">Bình luận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="">Chi phí</a>
                     </li>
                 </ul>
             </div>
             <div class="navmenu justify-content-end navbar-collapse col-lg-1 position-relative">
-                <button class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
-                    <a href="../index.php" class="login">Đăng xuất</a>
-                </button>
+                <form action="../logout.php" method="post"> 
+                    <button type="submit" class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
+                        Đăng xuất
+                    </button>
+                </form> 
             </div>
         </div>
     </nav>

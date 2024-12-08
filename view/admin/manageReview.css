@@ -1,0 +1,18 @@
+.navbar-brand {
+    font-family: 'Brush Script MT';
+    font-size: 2rem;
+}
+
+.navbar-nav {
+    font-size: 1.5rem;
+}
+
+.login {
+    text-decoration: none;
+    color: white;
+}
+
+
+footer i {
+    margin-right: 2rem;
+}

@@ -31,47 +31,44 @@
                 $mk = $_POST["passlg"];
 
                 // Prepare statement to prevent SQL injection
-                $stmt = mysqli_prepare($connect, "SELECT password FROM account WHERE user_name = ?");
+                $stmt = mysqli_prepare($connect, "SELECT account_id, `password` FROM account WHERE user_name = ?");
                 if ($stmt) {
                     mysqli_stmt_bind_param($stmt, "s", $tk);
                     mysqli_stmt_execute($stmt);
-                    mysqli_stmt_bind_result($stmt, $db_password);
+                    mysqli_stmt_bind_result($stmt, $account_id, $db_password);
                     mysqli_stmt_fetch($stmt);
                     mysqli_stmt_close($stmt);
 
                     // * Why the passwords are stored in plaintext. It is not secure. It is just for the sake of simplicity.
 
                     if ($db_password && $mk === $db_password) { 
+                        // Store account_id in session
                         $_SESSION["loged"] = true;
-			            $_SESSION["account_id"] = $account_id; // Lưu account_id vào session
+                        $_SESSION["account_id"] = $account_id; // Lưu account_id vào session
                         setcookie("success", "Đăng nhập thành công!", time()+3600, "/", "", false, true);
                         $rows = mysqli_query($connect,"SELECT * FROM restaurant WHERE restaurant_id IN (SELECT account_id FROM account WHERE user_name = '$tk' and password = '$mk')");
                         $count = mysqli_num_rows($rows);
                         // Redirect to the appropriate page
                         if ($count == 1) {
-                            header("Location: ../admin/admin.php");
+                            $_SESSION["admin"] = true;
+                            header("Location: ../admin/admin_manager_user.php");
+                            exit();
                         }
                         else {
                             header("Location: ../customer_home/home.php");
+                            exit();
                         }
-                        
-                        exit();
                     } else {
-                        setcookie("error", "Đăng nhập không thành công!", time()+3600, "/", "", false, true);
+                        setcookie("error", "Tên đăng nhập hoặc mật khẩu không đúng!", time()+3600, "/", "", false, true);
                         header("Location: login.php");
-                        exit();
                     }
                 } else {
-                    // Handle prepare statement error
-                    error_log("Prepare failed: " . mysqli_error($connect));
                     setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time()+3600, "/", "", false, true);
                     header("Location: login.php");
-                    exit();
                 }
             } else {
-                setcookie("error", "Vui lòng nhập đầy đủ thông tin!", time()+3600, "/", "", false, true);
+                setcookie("error", "Vui lòng nhập tên đăng nhập và mật khẩu!", time()+3600, "/", "", false, true);
                 header("Location: login.php");
-                exit();
             }
         }
     ?>
