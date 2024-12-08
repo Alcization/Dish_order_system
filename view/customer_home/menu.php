@@ -114,6 +114,7 @@ $total_pages = ceil($total_products / $products_per_page);
 
 
     <!-- Body -->
+     <div><?php echo $$_SESSION["account_id"] ?></div>
     <div class="container mt-4">
     <form id="price-filter-form" style="width: 250px;" method="GET" action="">
         <div class="input-group">
@@ -141,13 +142,10 @@ $total_pages = ceil($total_products / $products_per_page);
                             
                             <div class="card-body">
                                 <!-- Tên món ăn -->
-                                <!-- Nút thêm món -->
                                 <form method="POST" action="" onsubmit="showNotification(event, this)">           
                                     <h5 class="card-title" value="<?= htmlspecialchars($row['food_name']) ?>"><?= htmlspecialchars($row['food_name']) ?></h5>
-                                    
                                     <!-- Mô tả -->
                                     <p class="card-text"><?= htmlspecialchars($row['food_description']) ?></p>
-                                    
                                     <!-- Giá -->
                                     <p class="card-text fw-bold text-danger price">
                                         <?= number_format($row['food_price'], 0, ',', '.') ?> VND
