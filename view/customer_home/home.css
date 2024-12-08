@@ -14,6 +14,35 @@
     text-align: center;
 }
 
+.navbar-nav {
+    font-size: 1.5rem;
+}
+  
+.nav-link {
+    color: #333 !important;
+}
+  
+.nav-link:hover {
+    color: #ff8800 !important;
+    text-decoration: underline;
+}
+  
+.btn-danger {
+    font-size: 14px;
+    background-color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+}
+  
+.btn-danger a {
+    color: white;
+    text-decoration: none;
+}
+  
+.btn-danger:hover {
+    background-color: #e60000;
+}
+
 .flex-item-left {
     flex: 50%;
     padding: 5rem;
