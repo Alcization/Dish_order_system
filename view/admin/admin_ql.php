@@ -1,121 +1,125 @@
 <?php
-// Kết nối cơ sở dữ liệu
-$connect = mysqli_connect('localhost', 'root', '', 'pizza');
-if (!$connect) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-mysqli_set_charset($connect, "utf8");
+    session_start();
 
-// Phân trang
-$products_per_page = 8;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) $page = 1;
-$offset = ($page - 1) * $products_per_page;
-
-// Lấy từ khóa tìm kiếm
-$search_query = isset($_GET['query']) ? $_GET['query'] : null;
-
-// Truy vấn món ăn dựa trên tìm kiếm
-$sql = "
-    SELECT 
-        f.food_id, 
-        f.food_name, 
-        f.food_price, 
-        f.food_description, 
-        fi.food_image_url 
-    FROM 
-        food f 
-    LEFT JOIN 
-        food_image fi 
-    ON 
-        f.food_id = fi.food_id 
-    WHERE 
-        f.food_name LIKE ?
-    GROUP BY 
-        f.food_id 
-    LIMIT $products_per_page 
-    OFFSET $offset";
-
-$stmt = $connect->prepare($sql);
-$search_term = '%' . $search_query . '%';
-$stmt->bind_param("s", $search_term);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Đếm tổng số món ăn khớp với tìm kiếm
-$total_query = "
-    SELECT 
-        COUNT(*) as total 
-    FROM 
-        food 
-    WHERE 
-        food_name LIKE ?";
-$total_stmt = $connect->prepare($total_query);
-$total_stmt->bind_param("s", $search_term);
-$total_stmt->execute();
-$total_result = $total_stmt->get_result();
-$total_products = $total_result->fetch_assoc()['total'];
-$total_pages = ceil($total_products / $products_per_page);
-
-// Xử lý thêm món
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['add_food'])) {
-        $food_name = $_POST['food_name'];
-        $food_price = $_POST['food_price'];
-        $food_description = $_POST['food_description'];
-        $food_image = $_POST['food_image'];
-
-        $stmt = $connect->prepare("
-            INSERT INTO food (food_name, food_price, food_description)
-            VALUES (?, ?, ?)
-        ");
-        $stmt->bind_param("sis", $food_name, $food_price, $food_description);
-        $stmt->execute();
-
-        $last_id = $connect->insert_id;
-        $stmt = $connect->prepare("
-            INSERT INTO food_image (food_id, food_image_url)
-            VALUES (?, ?)
-        ");
-        $stmt->bind_param("is", $last_id, $food_image);
-        $stmt->execute();
-
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
+    if (!isset($_SESSION['admin'])):
+        header('Location: ../index.php');
+    endif;
+    // Kết nối cơ sở dữ liệu
+    $connect = mysqli_connect('localhost', 'root', '', 'pizza');
+    if (!$connect) {
+        die("Connection failed: " . mysqli_connect_error());
     }
+    mysqli_set_charset($connect, "utf8");
 
-   
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_food'])) {
-        $food_id = $_POST['food_id'];
-        $food_name = $_POST['food_name'];
-        $food_price = $_POST['food_price'];
-        $food_description = $_POST['food_description'];
-        $food_image = $_POST['food_image'];
+    // Phân trang
+    $products_per_page = 8;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($page < 1) $page = 1;
+    $offset = ($page - 1) * $products_per_page;
+
+    // Lấy từ khóa tìm kiếm
+    $search_query = isset($_GET['query']) ? $_GET['query'] : null;
+
+    // Truy vấn món ăn dựa trên tìm kiếm
+    $sql = "
+        SELECT 
+            f.food_id, 
+            f.food_name, 
+            f.food_price, 
+            f.food_description, 
+            fi.food_image_url 
+        FROM 
+            food f 
+        LEFT JOIN 
+            food_image fi 
+        ON 
+            f.food_id = fi.food_id 
+        WHERE 
+            f.food_name LIKE ?
+        GROUP BY 
+            f.food_id 
+        LIMIT $products_per_page 
+        OFFSET $offset";
+
+    $stmt = $connect->prepare($sql);
+    $search_term = '%' . $search_query . '%';
+    $stmt->bind_param("s", $search_term);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Đếm tổng số món ăn khớp với tìm kiếm
+    $total_query = "
+        SELECT 
+            COUNT(*) as total 
+        FROM 
+            food 
+        WHERE 
+            food_name LIKE ?";
+    $total_stmt = $connect->prepare($total_query);
+    $total_stmt->bind_param("s", $search_term);
+    $total_stmt->execute();
+    $total_result = $total_stmt->get_result();
+    $total_products = $total_result->fetch_assoc()['total'];
+    $total_pages = ceil($total_products / $products_per_page);
+
+    // Xử lý thêm món
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['add_food'])) {
+            $food_name = $_POST['food_name'];
+            $food_price = $_POST['food_price'];
+            $food_description = $_POST['food_description'];
+            $food_image = $_POST['food_image'];
+
+            $stmt = $connect->prepare("
+                INSERT INTO food (food_name, food_price, food_description)
+                VALUES (?, ?, ?)
+            ");
+            $stmt->bind_param("sis", $food_name, $food_price, $food_description);
+            $stmt->execute();
+
+            $last_id = $connect->insert_id;
+            $stmt = $connect->prepare("
+                INSERT INTO food_image (food_id, food_image_url)
+                VALUES (?, ?)
+            ");
+            $stmt->bind_param("is", $last_id, $food_image);
+            $stmt->execute();
+
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        }
+
     
-        // Cập nhật bảng food
-        $stmt = $connect->prepare("
-            UPDATE food 
-            SET food_name = ?, food_price = ?, food_description = ?
-            WHERE food_id = ?
-        ");
-        $stmt->bind_param("sisi", $food_name, $food_price, $food_description, $food_id);
-        $stmt->execute();
-    
-        // Cập nhật bảng food_image
-        $stmt = $connect->prepare("
-            UPDATE food_image 
-            SET food_image_url = ?
-            WHERE food_id = ?
-        ");
-        $stmt->bind_param("si", $food_image, $food_id);
-        $stmt->execute();
-    
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_food'])) {
+            $food_id = $_POST['food_id'];
+            $food_name = $_POST['food_name'];
+            $food_price = $_POST['food_price'];
+            $food_description = $_POST['food_description'];
+            $food_image = $_POST['food_image'];
+        
+            // Cập nhật bảng food
+            $stmt = $connect->prepare("
+                UPDATE food 
+                SET food_name = ?, food_price = ?, food_description = ?
+                WHERE food_id = ?
+            ");
+            $stmt->bind_param("sisi", $food_name, $food_price, $food_description, $food_id);
+            $stmt->execute();
+        
+            // Cập nhật bảng food_image
+            $stmt = $connect->prepare("
+                UPDATE food_image 
+                SET food_image_url = ?
+                WHERE food_id = ?
+            ");
+            $stmt->bind_param("si", $food_image, $food_id);
+            $stmt->execute();
+        
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        }
+        // Xử lý sửa món ăn (logic bổ sung tại đây nếu cần)
     }
-    
-    // Xử lý sửa món ăn (logic bổ sung tại đây nếu cần)
-}
 ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['food_name'])) {
@@ -144,20 +148,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['food_name'])) {
 }
 
 
-                                    // Xử lý xóa món ăn
-                                        if (isset($_POST['delete_food'])) {
-                                            $food_id = $_POST['food_id'];
-                                            $stmt = $connect->prepare("DELETE FROM food WHERE food_id = ?");
-                                            $stmt->bind_param("i", $food_id);
-                                            $stmt->execute();
+// Xử lý xóa món ăn
+if (isset($_POST['delete_food'])) {
+    $food_id = $_POST['food_id'];
+    $stmt = $connect->prepare("DELETE FROM food WHERE food_id = ?");
+    $stmt->bind_param("i", $food_id);
+    $stmt->execute();
 
-                                            $stmt = $connect->prepare("DELETE FROM food_image WHERE food_id = ?");
-                                            $stmt->bind_param("i", $food_id);
-                                            $stmt->execute();
+    $stmt = $connect->prepare("DELETE FROM food_image WHERE food_id = ?");
+    $stmt->bind_param("i", $food_id);
+    $stmt->execute();
 
-                                            header('Location: ' . $_SERVER['PHP_SELF']);
-                                            exit();
-                                        }
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit();
+}
                                  
 
 ?>
@@ -177,17 +181,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['food_name'])) {
 </head>
 <body>
     <!-- Thanh điều hướng -->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light px-4">
-        <a class="navbar-brand" href="#">
-            <img src="../image/logo.jpg" alt="logo" style="width: 3rem;">
-            <span>Pizza DB</span>
-        </a>
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item"><a class="nav-link" href="admin.php">Trang chủ</a></li>
-            <li class="nav-item"><a class="nav-link" href="admin_ql.php">Danh sách món ăn</a></li>
-            <li class="nav-item"><a class="nav-link" href="">Người dùng</a></li>
-        </ul>
-        <a href="../index.php" class="btn btn-danger">Đăng xuất</a>
+    <nav class="navbar position-relative navbar-expand-sm navbar-light px-4" style="background-color: #e8e3c5;">
+        <div class="container-fluid gap-5">
+            <a class="navbar-brand" href="">
+                <img src="../image/logo.jpg" alt="logo" style="width: 3rem;">
+                <span class="ms-4" style="font-size: 1.5rem;">Pizza DB</span>
+            </a>
+            <div class="navmenu justify-content-center navbar-collapse gap-5">
+                <ul class="navbar-nav gap-5">
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_user.php">Người dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_ql.php">Món ăn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_point.php">Điểm thưởng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_review.php">Bình luận</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navmenu justify-content-end navbar-collapse col-lg-1 position-relative">
+                <form action="../logout.php" method="post"> 
+                    <button type="submit" class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
+                        Đăng xuất
+                    </button>
+                </form> 
+            </div>
+        </div>
     </nav>
     <div class="container mt-5">
       <!-- Nút Thêm Món -->

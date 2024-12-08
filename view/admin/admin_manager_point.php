@@ -40,12 +40,12 @@ endif;
                 $threshold = intval($threshold_input);
             } else {
                 setcookie("error", "Vui lòng nhập số điểm hợp lệ (số nguyên không âm)!", time()+3600, "/", "", false, true);
-                header("Location: managePoint.php");
+                header("Location: admin_manager_point.php");
                 exit();
             }
         } else {
             setcookie("error", "Vui lòng nhập số điểm!", time()+3600, "/", "", false, true);
-            header("Location: managePoint.php");
+            header("Location: admin_manager_point.php");
             exit();
         }
     
@@ -78,7 +78,7 @@ endif;
     
             // Adjust the current page if it exceeds total_pages
             if($page > $total_pages && $total_pages > 0){
-                $redirect_url = "managePoint.php?page=$total_pages&point_threshold=$threshold&search_points=1&sort=".strtolower($sort);
+                $redirect_url = "admin_manager_point.php?page=$total_pages&point_threshold=$threshold&search_points=1&sort=".strtolower($sort);
                 if(!empty($firstName)){
                     $redirect_url .= "&first_name=" . urlencode($firstName);
                 }
@@ -112,14 +112,14 @@ endif;
                 // Handle prepare statement error
                 error_log("Prepare failed: " . mysqli_error($connect));
                 setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time()+3600, "/", "", false, true);
-                header("Location: managePoint.php");
+                header("Location: admin_manager_point.php");
                 exit();
             }
         } else {
             // Handle prepare statement error
             error_log("Prepare failed: " . mysqli_error($connect));
             setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time()+3600, "/", "", false, true);
-            header("Location: managePoint.php");
+            header("Location: admin_manager_point.php");
             exit();
         }
     }
@@ -129,7 +129,7 @@ endif;
 <head>
     <meta charset="UTF-8">
     <title>Manage Customer Points - Pizza DB</title>
-    <link rel="stylesheet" href="managePoint.css">
+    <link rel="stylesheet" href="admin_manager_point.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -149,7 +149,7 @@ endif;
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_user.php">Người dùng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_qlma.php">Món ăn</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_ql.php">Món ăn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_point.php">Điểm thưởng</a>
@@ -183,7 +183,7 @@ endif;
             }
         ?>
         <h2 class="mb-4">Quản lý điểm của khách hàng</h2>
-        <form method="GET" action="managePoint.php" class="mb-4">
+        <form method="GET" action="admin_manager_point.php" class="mb-4">
             <div class="input-group">
                 <span class="input-group-text">Điểm lớn hơn hoặc bằng:</span>
                 <input type="number" name="point_threshold" class="form-control" placeholder="Enter point threshold" value="<?php echo htmlspecialchars($threshold); ?>" min="0" required>
@@ -248,19 +248,19 @@ endif;
                             ?>
                             <?php if($page > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="managePoint.php?page=<?php echo $page-1; ?>&<?php echo $query_string; ?>">Trước</a>
+                                    <a class="page-link" href="admin_manager_point.php?page=<?php echo $page-1; ?>&<?php echo $query_string; ?>">Trước</a>
                                 </li>
                             <?php endif; ?>
 
                             <?php for($i = 1; $i <= $total_pages; $i++): ?>
                                 <li class="page-item <?php if($i == $page) echo 'active'; ?>">
-                                    <a class="page-link" href="managePoint.php?page=<?php echo $i; ?>&<?php echo $query_string; ?>"><?php echo $i; ?></a>
+                                    <a class="page-link" href="admin_manager_point.php?page=<?php echo $i; ?>&<?php echo $query_string; ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
 
                             <?php if($page < $total_pages): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="managePoint.php?page=<?php echo $page+1; ?>&<?php echo $query_string; ?>">Sau</a>
+                                    <a class="page-link" href="admin_manager_point.php?page=<?php echo $page+1; ?>&<?php echo $query_string; ?>">Sau</a>
                                 </li>
                             <?php endif; ?>
                         </ul>

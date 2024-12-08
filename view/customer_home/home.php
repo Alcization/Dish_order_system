@@ -14,7 +14,7 @@
     <nav class="navbar position-relative navbar-expand-sm navbar-light px-4" style="background-color: #e8e3c5;">
         <div class="container-fluid gap-5">
             <!-- Title and Logo -->
-            <a class="navbar-brand" href="">
+            <a class="navbar-brand" href="home.php">
                 <img src="../image/logo.jpg" alt="logo" style="width: 3rem;">
                 <span class="ms-4" style="font-size: 1.5rem;">Pizza DB</span>
             </a>
@@ -22,7 +22,7 @@
             <div class="navmenu justify-content-center navbar-collapse gap-5">
                 <ul class="navbar-nav gap-5">
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="">Trang chủ</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="home.php">Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="menu.php">Menu</a>
@@ -30,13 +30,18 @@
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="order.php">Đơn hàng</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="rating.php">Đánh giá</a>
+                    </li>
                 </ul>
             </div>
             <!-- Logout Bar -->
             <div class="navmenu justify-content-end navbar-collapse col-lg-1 position-relative">
-                <button class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
-                    <a href="../index.php" class="login">Đăng xuất</a>
-                </button>
+                <form action="../logout.php" method="post"> 
+                    <button type="submit" class="btn btn-outline-success text-white btn-danger my-2 my-sm-0 ms-2">
+                    Đăng xuất
+                    </button>
+                </form> 
             </div>
         </div>
     </nav>

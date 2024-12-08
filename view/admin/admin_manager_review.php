@@ -117,7 +117,7 @@
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_user.php">Người dùng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_qlma.php">Món ăn</a>
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_ql.php">Món ăn</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_point.php">Điểm thưởng</a>
@@ -151,7 +151,7 @@
             }
         ?>
         <h2 class="mb-4">Search Customer Reviews</h2>
-        <form method="GET" action="manageReview.php" class="mb-4">
+        <form method="GET" action="admin_manager_review.php" class="mb-4">
             <div class="input-group mb-3">
                 <label class="input-group-text" for="food_id">Select Food:</label>
                 <select class="form-select" id="food_id" name="food_id" required>
@@ -199,7 +199,7 @@
                                 <td><?php echo htmlspecialchars($review['rating']); ?></td>
                                 <td><?php echo htmlspecialchars($review['review_description']); ?></td>
                                 <td>
-                                    <form method="POST" action="manageReview.php" style="display:inline;">
+                                    <form method="POST" action="admin_manager_review.php" style="display:inline;">
                                         <input type="hidden" name="customer_id" value="<?php echo htmlspecialchars($review['customer_id']); ?>">
                                         <input type="hidden" name="food_id" value="<?php echo htmlspecialchars($selected_food); ?>">
                                         <button type="submit" name="delete_review" class="btn btn-danger btn-sm">Delete</button>
