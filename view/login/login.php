@@ -44,7 +44,6 @@
                 mysqli_stmt_fetch($stmt);
                 mysqli_stmt_close($stmt);
 
-<<<<<<< HEAD
                 // Prepare statement to prevent SQL injection
                 $stmt = mysqli_prepare($connect, "SELECT account_id, `password` FROM account WHERE user_name = ?");
                 if ($stmt) {
@@ -53,27 +52,7 @@
                     mysqli_stmt_bind_result($stmt, $account_id, $db_password);
                     mysqli_stmt_fetch($stmt);
                     mysqli_stmt_close($stmt);
-=======
-                // * Why the passwords are stored in plaintext. It is not secure. It is just for the sake of simplicity.
-    
-                if ($db_password && $mk === $db_password) {
-                    // Truy vấn để lấy account_id từ bảng account
-                    $stmt_id = mysqli_prepare($connect, "SELECT account_id FROM account WHERE user_name = ?");
-                    if ($stmt_id) {
-                        mysqli_stmt_bind_param($stmt_id, "s", $tk);
-                        mysqli_stmt_execute($stmt_id);
-                        mysqli_stmt_bind_result($stmt_id, $account_id);
-                        mysqli_stmt_fetch($stmt_id);
-                        mysqli_stmt_close($stmt_id);
->>>>>>> 13a2bc13717989f38abae8e115efcc88bf6ddaa4
 
-                        if ($account_id) {
-                            // Lưu account_id vào session
-                            $_SESSION["loged"] = true;
-                            $_SESSION["account_id"] = $account_id;
-                            setcookie("success", "Đăng nhập thành công!", time() + 3600, "/", "", false, true);
-
-<<<<<<< HEAD
                     if ($db_password && $mk === $db_password) { 
                         // Store account_id in session
                         $_SESSION["loged"] = true;
@@ -93,47 +72,18 @@
                         }
                     } else {
                         setcookie("error", "Tên đăng nhập hoặc mật khẩu không đúng!", time()+3600, "/", "", false, true);
-=======
-                            // Kiểm tra quyền truy cập
-                            $rows = mysqli_query($connect, "SELECT * FROM restaurant WHERE restaurant_id = '$account_id'");
-                            $count = mysqli_num_rows($rows);
-
-                            if ($count == 1) {
-                                header("Location: ../admin/admin.php");
-                            } else {
-                                header("Location: ../customer_home/home.php");
-                            }
-                            exit();
-                        } else {
-                            setcookie("error", "Không tìm thấy tài khoản hợp lệ!", time() + 3600, "/", "", false, true);
-                            header("Location: login.php");
-                            exit();
-                        }
-                    } else {
-                        // Handle prepare statement error
-                        error_log("Prepare failed: " . mysqli_error($connect));
-                        setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time() + 3600, "/", "", false, true);
->>>>>>> 13a2bc13717989f38abae8e115efcc88bf6ddaa4
                         header("Location: login.php");
                     }
-<<<<<<< HEAD
                 } else {
                     setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time()+3600, "/", "", false, true);
                     header("Location: login.php");
-=======
->>>>>>> 13a2bc13717989f38abae8e115efcc88bf6ddaa4
                 }
 
             } else {
-<<<<<<< HEAD
                 setcookie("error", "Vui lòng nhập tên đăng nhập và mật khẩu!", time()+3600, "/", "", false, true);
-=======
-                // Handle prepare statement error
-                error_log("Prepare failed: " . mysqli_error($connect));
-                setcookie("error", "Lỗi hệ thống. Vui lòng thử lại!", time() + 3600, "/", "", false, true);
->>>>>>> 13a2bc13717989f38abae8e115efcc88bf6ddaa4
                 header("Location: login.php");
             }
+
         } else {
             setcookie("error", "Vui lòng nhập đầy đủ thông tin!", time() + 3600, "/", "", false, true);
             header("Location: login.php");
