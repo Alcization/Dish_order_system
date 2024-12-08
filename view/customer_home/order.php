@@ -30,9 +30,15 @@
   // Khởi tạo giá trị ban đầu
   $discount = 0;
   $total_to_pay = 0;
-  $order_id = 7; // Add logic later
   $customer_id = $_SESSION["account_id"] ?? null;
   $delivery_fee = 20000; // Phí giao hàng cố định
+
+  // Get order_id from customer_id
+  $order_query = "SELECT order_id FROM `order` WHERE customer_id = ? AND order_status = 0";
+  $order_stmt = mysqli_prepare($connect, $order_query);
+  mysqli_stmt_bind_param($order_stmt, "i", $customer_id);
+  mysqli_stmt_execute($order_stmt);
+  $order_id = mysqli_stmt_get_result($order_stmt);
   
   // Lấy các món trong đơn
   $sql = "SELECT 
@@ -49,19 +55,47 @@
             c.food_id = f.food_id
         WHERE 
             c.order_id = ?";
+  // Prepare and execute the initial query
   $stmt = mysqli_prepare($connect, $sql);
-  mysqli_stmt_bind_param($stmt, "i", $order_id);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
+  if ($stmt) {
+      mysqli_stmt_bind_param($stmt, "i", $order_id);
+      mysqli_stmt_execute($stmt);
+      $result = mysqli_stmt_get_result($stmt);
 
-  // Tính tổng giá tạm thời
+      // Check if the result is valid
+      if ($result) {
+          // Process the result if needed
+      } else {
+          echo "Error: " . mysqli_error($connect);
+      }
+      mysqli_stmt_close($stmt);
+  } else {
+      echo "Error: " . mysqli_error($connect);
+  }
+
+  // Calculate the total temporary price
   $total_query = "SELECT SUM(temp_price) AS total_price FROM creat_order WHERE order_id = ?";
   $total_stmt = mysqli_prepare($connect, $total_query);
-  mysqli_stmt_bind_param($total_stmt, "i", $order_id);
-  mysqli_stmt_execute($total_stmt);
-  $total_result = mysqli_stmt_get_result($total_stmt);
-  $total_row = mysqli_fetch_assoc($total_result);
-  $total_price = $total_row['total_price'];
+  if ($total_stmt) {
+      mysqli_stmt_bind_param($total_stmt, "i", $order_id);
+      mysqli_stmt_execute($total_stmt);
+      $total_result = mysqli_stmt_get_result($total_stmt);
+
+      // Check if the result is valid
+      if ($total_result) {
+          $total_row = mysqli_fetch_assoc($total_result);
+          if ($total_row) {
+              $total_price = $total_row['total_price'];
+          } else {
+              $total_price = 0; // Default value if no rows are returned
+          }
+      } else {
+          echo "Error: " . mysqli_error($connect);
+      }
+      mysqli_stmt_close($total_stmt);
+  } else {
+      echo "Error: " . mysqli_error($connect);
+  }
 
   // Xử lý mã giảm giá
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['coupon_code'])) {
@@ -115,6 +149,19 @@
           VALUES (?, ?, ?, ?)
       ";
     $stmt = mysqli_prepare($connect, $insert_order_query);
+    // Update $total_to_pay into final_price and switch order_status to 1 in order table
+    $update_order_query = "
+          UPDATE `order` 
+          SET final_price = ?, order_status = 1
+          WHERE order_id = ?
+      ";
+    $update_stmt = mysqli_prepare($connect, $update_order_query);
+    mysqli_stmt_bind_param($update_stmt, "ii", $total_to_pay, $order_id);
+    mysqli_stmt_execute($update_stmt);
+    echo "<script>
+            alert('Đơn hàng đã được xử lý thành công!');
+            window.location.href = 'menu.php';
+          </script>";
   }
 
   ?>
@@ -210,7 +257,7 @@
         </div>
 
         <!-- Nút FINISH nằm trong <form> -->
-        <button class="finish" type="button" name="finish_order" onclick="showFinishMessage()">FINISH</button>
+        <button class="finish" type="submit" name="finish_order">FINISH</button>
 
       </form>
     </section>

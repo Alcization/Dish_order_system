@@ -126,11 +126,12 @@
                         
                         <div class="card-body">
                             <!-- Tên món ăn -->
-                            <form method="POST" action="" onsubmit="showNotification(event, this)">           
+                            <form method="POST" action="add_food_to_order.php">           
                                 <h5 class="card-title" value="<?= htmlspecialchars($row['food_name']) ?>"><?= htmlspecialchars($row['food_name']) ?></h5>
                                 <!-- Mô tả -->
                                 <p class="card-text"><?= htmlspecialchars($row['food_description']) ?></p>
                                 <!-- Giá -->
+                                <input type="hidden" class="food_id" name="food_price" value="<?= $row['food_price'] ?>">
                                 <p class="card-text fw-bold text-danger price">
                                     <?= number_format($row['food_price'], 0, ',', '.') ?> VND
                                 </p>
