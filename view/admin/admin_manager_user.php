@@ -34,7 +34,11 @@
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_user.php">Người dùng</a>
                     </li>
                     <li class="nav-item">
+<<<<<<< HEAD:view/admin/admin.php
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_ql.php">Món ăn</a>
+=======
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_qlma.php">Món ăn</a>
+>>>>>>> 3965188b41dd84663ac786bf1098ca02d1fc2433:view/admin/admin_manager_user.php
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_point.php">Điểm thưởng</a>

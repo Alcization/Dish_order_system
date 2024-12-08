@@ -1,0 +1,117 @@
+
+
+/* Navbar */
+.navbar {
+    font-size: 16px;
+  }
+  
+  .navbar-brand img {
+    border-radius: 50%;
+  }
+  
+  .nav-link {
+    color: #333 !important;
+  }
+  
+  .nav-link:hover {
+    color: #ff8800 !important;
+    text-decoration: underline;
+  }
+  
+  .btn-danger {
+    font-size: 14px;
+    background-color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .btn-danger a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e60000;
+  }
+  
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 30px;
+    text-align: center;
+}
+
+.flex-item-left {
+    flex: 50%;
+    padding: 5rem;
+}
+
+.promotion_text {
+    padding-top: 5rem;
+    font-size: 3.1rem;
+    font-weight: 600;
+}
+.promotion_button_container {
+    padding-top: 5rem;
+}
+
+.login {
+    text-decoration: none;
+    color: white;
+}
+
+
+/* Cấu hình cho container sử dụng Grid */
+.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Đặt các thẻ theo lưới với các cột tự động */
+    gap: 0px; /* Khoảng cách giữa các thẻ */
+}
+
+/* Cấu hình cho thẻ card */
+.card {
+    display: flex;
+    flex-direction: column; /* Các phần tử trong card xếp theo chiều dọc */
+    justify-content: space-between;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 400px; /* Đảm bảo các thẻ có chiều cao đồng đều */
+}
+
+/* Cấu hình phần hình ảnh */
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}
+
+/* Cấu hình phần thân card */
+.card-body {
+    flex-grow: 1; /* Chiếm không gian còn lại trong thẻ card */
+    padding: 15px;
+}
+
+/* Cấu hình footer của card */
+.card-footer {
+    padding: 10px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-top: 1px solid #ddd;
+}
+
+.card-title {
+    font-size: 1rem; /* Điều chỉnh kích thước chữ, bạn có thể thay đổi giá trị này */
+}
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Giới hạn hiển thị 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden; /* Ẩn phần văn bản vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ... nếu mô tả quá dài */
+}
+.d-flex {
+  display: flex;
+  gap: 10px; /* Khoảng cách giữa các nút */
+}
