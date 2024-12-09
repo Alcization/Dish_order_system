@@ -47,7 +47,7 @@
         $insert_query = "INSERT INTO customer (customer_first_name, customer_last_name, phone_number, email, points, customer_id) VALUES ('$first_name', '$last_name', '$phone_number', '$email', $points, $account_id)";
         
         if (mysqli_query($connect, $insert_query)) {
-            echo "<script>alert('Thêm khách hàng thành công!'); window.location.reload();</script>";
+            echo "<script>alert('Thêm khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
         } else {
             echo "<script>alert('Lỗi thêm khách hàng: " . mysqli_error($connect) . "');</script>";
         }
@@ -61,13 +61,20 @@
         $phone_number = mysqli_real_escape_string($connect, $_POST['phone_number']);
         $email = mysqli_real_escape_string($connect, $_POST['email']);
         $points = intval($_POST['points']);
-
-        $update_query = "UPDATE customer SET customer_first_name='$first_name', customer_last_name='$last_name', phone_number='$phone_number', email='$email', points=$points WHERE customer_id=$customer_id";
-        
-        if (mysqli_query($connect, $update_query)) {
-            echo "<script>alert('Sửa khách hàng thành công!'); window.location.reload();</script>";
+    
+        // Use prepared statements to prevent SQL injection
+        $update_query = "CALL UpdateCustomer(?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connect, $update_query);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "ssssii",  $customer_id, $first_name, $last_name, $phone_number, $email, $points);
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<script>alert('Sửa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+            } else {
+                echo "<script>alert('Lỗi sửa khách hàng: " . $customer_id . "');</script>";
+            }
+            mysqli_stmt_close($stmt);
         } else {
-            echo "<script>alert('Lỗi sửa khách hàng: " . mysqli_error($connect) . "');</script>";
+            echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
         }
     }
 
@@ -274,7 +281,7 @@
     <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="editCustomerForm" method="POST">
+                <form method="POST">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editCustomerModalLabel">Sửa Khách Hàng</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
