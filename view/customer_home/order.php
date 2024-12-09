@@ -4,6 +4,7 @@
     if (!isset($_SESSION['account_id'])):
         header('Location: ../index.php');
     endif;
+    error_reporting(E_ERROR | E_PARSE);
 ?>
 
 <!DOCTYPE html>
@@ -42,36 +43,23 @@
   
   // Lấy các món trong đơn
   $sql = "SELECT 
-            c.food_id, 
-            f.food_name, 
-            f.food_price, 
-            c.quantity, 
-            c.temp_price
-        FROM 
-            creat_order c
-        JOIN 
-            food f
-        ON 
-            c.food_id = f.food_id
-        WHERE 
-            c.order_id = ?";
-  // Prepare and execute the initial query
+    c.food_id, 
+    f.food_name, 
+    f.food_price, 
+    c.quantity, 
+    c.temp_price
+  FROM 
+    creat_order c
+  JOIN 
+    food f
+  ON 
+    c.food_id = f.food_id
+  WHERE 
+    c.order_id = ?";
   $stmt = mysqli_prepare($connect, $sql);
-  if ($stmt) {
-      mysqli_stmt_bind_param($stmt, "i", $order_id);
-      mysqli_stmt_execute($stmt);
-      $result = mysqli_stmt_get_result($stmt);
-
-      // Check if the result is valid
-      if ($result) {
-          // Process the result if needed
-      } else {
-          echo "Error: " . mysqli_error($connect);
-      }
-      mysqli_stmt_close($stmt);
-  } else {
-      echo "Error: " . mysqli_error($connect);
-  }
+  mysqli_stmt_bind_param($stmt, "i", $order_id);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
 
   // Calculate the total temporary price
   $total_query = "SELECT SUM(temp_price) AS total_price FROM creat_order WHERE order_id = ?";
