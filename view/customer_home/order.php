@@ -50,7 +50,10 @@
   
   // Check if order_id is valid
   if ($order_id === null) {
-    echo "No active order found for the customer.";
+    echo "<script>
+            alert('Không có đơn hàng nào trong giỏ hàng, bạn hãy thêm món hàng đầu tiên để truy cập đơn hàng');
+            window.location.href = 'menu.php';
+          </script>";
     exit();
   }
 

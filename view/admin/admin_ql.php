@@ -201,6 +201,9 @@ if (isset($_POST['delete_food'])) {
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_review.php">Bình luận</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_sale.php">Doanh số</a>
+                    </li>
                 </ul>
             </div>
             <div class="navmenu justify-content-end navbar-collapse col-lg-1 position-relative">

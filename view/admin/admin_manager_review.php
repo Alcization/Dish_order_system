@@ -97,6 +97,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Customer Reviews - Pizza DB</title>
+    <link rel="icon" href="../image/Pizza_DB_favicon.ico">
     <link rel="stylesheet" href="manageReview.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -124,6 +125,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_review.php">Bình luận</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase text-black fw-bold" href="admin_manager_sale.php">Doanh số</a>
                     </li>
                 </ul>
             </div>
