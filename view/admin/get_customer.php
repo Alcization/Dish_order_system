@@ -8,7 +8,7 @@ mysqli_set_charset($connect, "utf8");
 
 if (isset($_GET['customer_id'])) {
     $customer_id = intval($_GET['customer_id']);
-    $query = "SELECT customer_first_name, customer_last_name, phone_number, email, points 
+    $query = "SELECT customer_id, customer_first_name, customer_last_name, phone_number, email, points 
               FROM customer 
               WHERE customer_id = $customer_id";
     $result = mysqli_query($connect, $query);

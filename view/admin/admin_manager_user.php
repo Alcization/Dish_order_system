@@ -63,18 +63,11 @@
         $points = intval($_POST['points']);
     
         // Use prepared statements to prevent SQL injection
-        $update_query = "CALL UpdateCustomer(?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($connect, $update_query);
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "ssssii",  $customer_id, $first_name, $last_name, $phone_number, $email, $points);
-            if (mysqli_stmt_execute($stmt)) {
-                echo "<script>alert('Sửa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
-            } else {
-                echo "<script>alert('Lỗi sửa khách hàng: " . $customer_id . "');</script>";
-            }
-            mysqli_stmt_close($stmt);
+        $update_query = "UPDATE customer SET customer_first_name='$first_name', customer_last_name='$last_name', phone_number='$phone_number', email='$email', points=$points WHERE customer_id=$customer_id";
+        if (mysqli_query($connect, $update_query)) {
+            echo "<script>alert('Sửa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
         } else {
-            echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
+            echo "<script>alert('Lỗi sửa khách hàng: " . $customer_id . "');</script>";
         }
     }
 
@@ -120,6 +113,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <title>Pizza DB</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -287,7 +281,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="edit_customer_id" name="customer_id">
+                        <input type="text" class="form-control" id="edit_customer_id" name="customer_id">
                         <div class="mb-3">
                             <label for="edit_first_name" class="form-label">Họ</label>
                             <input type="text" class="form-control" id="edit_first_name" name="first_name" required>
@@ -376,7 +370,7 @@
 
         $("#confirmDeleteBtn").click(function() {
             var customer_id = $(this).data("id");
-            $.post("admin.php", { delete_customer: true, customer_id: customer_id }, function(response) {
+            $.post("admin_manager_user.php", { delete_customer: true, customer_id: customer_id }, function(response) {
                 location.reload();
             });
         });
