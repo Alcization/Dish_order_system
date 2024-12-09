@@ -4,7 +4,7 @@
     if (!isset($_SESSION['account_id'])):
         header('Location: ../index.php');
     endif;
-    error_reporting(E_ERROR | E_PARSE);
+    // error_reporting(E_ERROR | E_PARSE);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +21,6 @@
 </head>
 
 <body>
-
   <?php
   $connect = mysqli_connect('localhost', 'root', '', 'pizza');
   if (!$connect) {
@@ -37,29 +36,59 @@
   // Get order_id from customer_id
   $order_query = "SELECT order_id FROM `order` WHERE customer_id = ? AND order_status = 0";
   $order_stmt = mysqli_prepare($connect, $order_query);
-  mysqli_stmt_bind_param($order_stmt, "i", $customer_id);
-  mysqli_stmt_execute($order_stmt);
-  $order_id = mysqli_stmt_get_result($order_stmt);
+  if ($order_stmt) {
+      mysqli_stmt_bind_param($order_stmt, "i", $customer_id);
+      mysqli_stmt_execute($order_stmt);
+      $order_result = mysqli_stmt_get_result($order_stmt);
+      $order_row = mysqli_fetch_assoc($order_result);
+      $order_id = $order_row['order_id'] ?? null;
+      mysqli_stmt_close($order_stmt);
+  } else {
+      echo "Error: " . mysqli_error($connect);
+      exit();
+  }
   
-  // Lấy các món trong đơn
+  // Check if order_id is valid
+  if ($order_id === null) {
+    echo "No active order found for the customer.";
+    exit();
+  }
+
+  // Get the items in the order
   $sql = "SELECT 
-    c.food_id, 
-    f.food_name, 
-    f.food_price, 
-    c.quantity, 
-    c.temp_price
+      c.food_id, 
+      f.food_name, 
+      f.food_price, 
+      c.quantity, 
+      c.temp_price
   FROM 
-    creat_order c
+      creat_order c
   JOIN 
-    food f
+      food f
   ON 
-    c.food_id = f.food_id
+      c.food_id = f.food_id
+  JOIN 
+      `order` o
+  ON
+      c.order_id = o.order_id
   WHERE 
-    c.order_id = ?";
+      c.order_id = ? AND o.order_status = 0";
   $stmt = mysqli_prepare($connect, $sql);
-  mysqli_stmt_bind_param($stmt, "i", $order_id);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
+  if ($stmt) {
+      mysqli_stmt_bind_param($stmt, "i", $order_id);
+      mysqli_stmt_execute($stmt);
+      $result = mysqli_stmt_get_result($stmt);
+
+      // Check if the result is valid
+      if ($result) {
+          // Process the result if needed
+      } else {
+          echo "Error: " . mysqli_error($connect);
+      }
+      mysqli_stmt_close($stmt);
+  } else {
+      echo "Error: " . mysqli_error($connect);
+  }
 
   // Calculate the total temporary price
   $total_query = "SELECT SUM(temp_price) AS total_price FROM creat_order WHERE order_id = ?";
@@ -140,7 +169,7 @@
     // Update $total_to_pay into final_price and switch order_status to 1 in order table
     $update_order_query = "
           UPDATE `order` 
-          SET final_price = ?, order_status = 1
+          SET final_price = ?, order_status = 3
           WHERE order_id = ?
       ";
     $update_stmt = mysqli_prepare($connect, $update_order_query);
