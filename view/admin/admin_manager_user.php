@@ -13,7 +13,7 @@
     mysqli_set_charset($connect, "utf8");
 
     // Số lượng khách hàng trên mỗi trang
-    $limit = 5;
+    $limit = 8;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $limit;
 
@@ -26,7 +26,7 @@
         $points = intval($_POST['points']);
         
         // Giả sử bạn có một tài khoản sẵn có để sử dụng cho khách hàng
-        $account_id = 1; // Thay đổi tùy theo tài khoản thực tế trong bảng account
+        $account_id = 13; // Thay đổi tùy theo tài khoản thực tế trong bảng account
 
         // Kiểm tra dữ liệu
         if (!preg_match('/^\d{10}$/', $phone_number)) {
@@ -114,6 +114,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <title>Pizza DB</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
