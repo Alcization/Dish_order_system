@@ -36,11 +36,11 @@
             mysqli_stmt_execute($delete_stmt);
             mysqli_stmt_close($delete_stmt);
             setcookie("success", "Review deleted successfully!", time()+3600, "/", "", false, true);
-            header("Location: manageReview.php");
+            header("Location: admin_manager_review.php");
             exit();
         } else {
             setcookie("error", "Failed to delete review. Please try again.", time()+3600, "/", "", false, true);
-            header("Location: manageReview.php");
+            header("Location: admin_manager_review.php");
             exit();
         }
     }
@@ -50,7 +50,12 @@
         if(isset($_GET['food_id']) && isset($_GET['rating'])){
             $selected_food = $_GET['food_id'];
             $rating = $_GET['rating'];
-            $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
+            $sort_order = 'DESC'; // default sort order
+            if(isset($_GET['sort_order'])){
+                $sort_order = ($_GET['sort_order'] === 'asc') ? 'ASC' : 'DESC';
+            } elseif(isset($_GET['sort'])){
+                $sort_order = ($_GET['sort'] === 'asc') ? 'ASC' : 'DESC';
+            }
 
             // Validate rating
             if($rating === 'all' || preg_match('/^[1-5]$/', $rating)){
@@ -77,17 +82,17 @@
                     // Handle prepare statement error
                     error_log("Prepare failed: " . mysqli_error($connect));
                     setcookie("error", "System error. Please try again!", time()+3600, "/", "", false, true);
-                    header("Location: manageReview.php");
+                    header("Location: admin_manager_review.php");
                     exit();
                 }
             } else {
                 setcookie("error", "Please enter a valid rating (1-5) or 'all'!", time()+3600, "/", "", false, true);
-                header("Location: manageReview.php");
+                header("Location: admin_manager_review.php");
                 exit();
             }
         } else {
             setcookie("error", "Please select a food item and enter a rating!", time()+3600, "/", "", false, true);
-            header("Location: manageReview.php");
+            header("Location: admin_manager_review.php");
             exit();
         }
     }
@@ -154,12 +159,12 @@
                 setcookie("error", "", time()-3600, "/");
             }
         ?>
-        <h2 class="mb-4">Search Customer Reviews</h2>
+        <h2 class="mb-4">Quản lý bình luận khách hàng</h2>
         <form method="GET" action="admin_manager_review.php" class="mb-4">
             <div class="input-group mb-3">
-                <label class="input-group-text" for="food_id">Select Food:</label>
+                <label class="input-group-text" for="food_id">Lựa chọn món ăn:</label>
                 <select class="form-select" id="food_id" name="food_id" required>
-                    <option value="">Choose...</option>
+                    <option value="">Lựa chọn...</option>
                     <?php foreach($foods as $food): ?>
                         <option value="<?php echo htmlspecialchars($food['food_id']); ?>" <?php if($selected_food == $food['food_id']) echo 'selected'; ?>>
                             <?php echo htmlspecialchars($food['food_name']); ?>
@@ -168,29 +173,29 @@
                 </select>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text">Rating:</span>
-                <input type="text" name="rating" class="form-control" placeholder="Enter rating (1-5) or 'all'" value="<?php echo htmlspecialchars($rating); ?>" required>
+                <span class="input-group-text">Đánh giá:</span>
+                <input type="text" name="rating" class="form-control" placeholder="Nhập đánh giá từ 1-5 hoặc 'all'" value="<?php echo htmlspecialchars($rating); ?>" required>
             </div>
             <input type="hidden" name="sort_order" value="<?php echo htmlspecialchars($sort_order); ?>">
-            <button type="submit" name="search_reviews" class="btn btn-primary">Search</button>
-            <button type="submit" name="sort_order" value="<?php echo ($sort_order === 'ASC') ? 'DESC' : 'ASC'; ?>" class="btn btn-secondary ms-2">
-                Sort by Rating <?php echo ($sort_order === 'ASC') ? 'Descending' : 'Ascending'; ?>
-            </button>
+            <button type="submit" name="search_reviews" class="btn btn-primary">Lọc</button>
+            <!-- <button type="submit" name="sort_order" value="<?php echo ($sort_order === 'ASC') ? 'DESC' : 'ASC'; ?>" class="btn btn-secondary ms-2">
+                Sắp xếp theo đánh giá <?php echo ($sort_order === 'ASC') ? 'giảm dần' : 'tăng dần'; ?>
+            </button> -->
         </form>
 
         <?php if(isset($_GET['search_reviews'])): ?>
-            <h4 class="mb-3">Customers who rated <?php echo htmlspecialchars($rating); ?> for the selected food:</h4>
+            <h4 class="mb-3">Khánh hàng đánh giá <?php echo htmlspecialchars($rating); ?> cho món ăn được lựa chọn:</h4>
             <?php if(count($reviews) > 0): ?>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
-                            <th>Phone Number</th>
+                            <th>Họ và tên</th>
+                            <th>Số điện thoại</th>
                             <th>Email</th>
-                            <th>Rating</th>
-                            <th>Review Description</th>
-                            <th>Actions</th>
+                            <th>Đánh giá</th>
+                            <th>Bình luận</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -206,7 +211,7 @@
                                     <form method="POST" action="admin_manager_review.php" style="display:inline;">
                                         <input type="hidden" name="customer_id" value="<?php echo htmlspecialchars($review['customer_id']); ?>">
                                         <input type="hidden" name="food_id" value="<?php echo htmlspecialchars($selected_food); ?>">
-                                        <button type="submit" name="delete_review" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" name="delete_review" class="btn btn-danger btn-sm">Xóa</button>
                                     </form>
                                 </td>
                             </tr>

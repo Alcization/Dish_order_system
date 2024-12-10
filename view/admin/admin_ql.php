@@ -85,7 +85,7 @@
             $stmt->bind_param("is", $last_id, $food_image);
             $stmt->execute();
 
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            echo "<script>alert('Thêm món ăn thành công!'); window.location.href = 'admin_ql.php';</script>";
             exit();
         }
 
@@ -115,7 +115,7 @@
             $stmt->bind_param("si", $food_image, $food_id);
             $stmt->execute();
         
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            echo "<script>alert('Sửa món ăn thành công!'); window.location.href = 'admin_ql.php';</script>";
             exit();
         }
         // Xử lý sửa món ăn (logic bổ sung tại đây nếu cần)
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['food_name'])) {
     $stmt->bind_param("is", $last_id, $food_image);
     $stmt->execute();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    echo "<script>alert('Thêm món ăn thành công!'); window.location.href = 'admin_ql.php';</script>";
     exit();
 }
 
@@ -159,7 +159,7 @@ if (isset($_POST['delete_food'])) {
     $stmt->bind_param("i", $food_id);
     $stmt->execute();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    echo "<script>alert('Xóa món ăn thành công!'); window.location.href = 'admin_ql.php';</script>";
     exit();
 }
                                  

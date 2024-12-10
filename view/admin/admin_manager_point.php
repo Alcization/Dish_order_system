@@ -190,10 +190,10 @@ endif;
         <form method="GET" action="admin_manager_point.php" class="mb-4">
             <div class="input-group">
                 <span class="input-group-text">Điểm lớn hơn hoặc bằng:</span>
-                <input type="number" name="point_threshold" class="form-control" placeholder="Enter point threshold" value="<?php echo htmlspecialchars($threshold); ?>" min="0" required>
+                <input type="number" name="point_threshold" class="form-control" placeholder="Nhập điểm" value="<?php echo htmlspecialchars($threshold); ?>" min="0" required>
                 
                 <span class="input-group-text">Tên:</span>
-                <input type="text" name="first_name" class="form-control" placeholder="Enter first name" value="<?php echo htmlspecialchars($firstName); ?>">
+                <input type="text" name="first_name" class="form-control" placeholder="Nhập tên" value="<?php echo htmlspecialchars($firstName); ?>">
                 
                 <button type="submit" name="search_points" class="btn btn-primary">Search</button>
                 <!-- Sort Button with Icons -->
