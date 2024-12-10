@@ -117,6 +117,8 @@
       echo "Error: " . mysqli_error($connect);
   }
 
+
+
   // Xử lý mã giảm giá
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['coupon_code'])) {
     $coupon_code = $_POST['coupon_code'];
@@ -182,8 +184,30 @@
             alert('Đơn hàng đã được xử lý thành công!');
             window.location.href = 'menu.php';
           </script>";
+
+
   }
 
+
+  // Handle delete food action
+  if (isset($_POST['delete_food'])) {
+    $food_id = intval($_POST['food_id']);
+    $order_id = intval($_POST['order_id']);
+    $delete_query = "DELETE FROM creat_order WHERE order_id = ? AND food_id = ?";
+    $delete_stmt = mysqli_prepare($connect, $delete_query);
+    if ($delete_stmt) {
+        mysqli_stmt_bind_param($delete_stmt, "ii", $order_id, $food_id);
+        if (mysqli_stmt_execute($delete_stmt)) {
+            echo "<script>alert('Món ăn đã được xóa thành công!'); window.location.href = 'order.php';</script>";
+        } else {
+            echo "<script>alert('Lỗi xóa món ăn: " . mysqli_stmt_error($delete_stmt) . "');</script>";
+        }
+        mysqli_stmt_close($delete_stmt);
+    } else {
+        echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
+    }
+  }
+  
   ?>
   <!-- Navigator Bar -->
   <nav class="navbar position-relative navbar-expand-sm navbar-light px-4" style="background-color: #e8e3c5;">
@@ -233,6 +257,7 @@
             <th>Price</th>
             <th>Quantity</th>
             <th>Temporary Total</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -243,6 +268,13 @@
               <td><?php echo number_format($row['food_price']); ?> VND</td>
               <td><?php echo htmlspecialchars($row['quantity']); ?></td>
               <td><?php echo number_format($row['temp_price']); ?> VND</td>
+              <td>
+                <form method="POST" action="order.php" style="display:inline;">
+                    <input type="hidden" name="food_id" value="<?php echo htmlspecialchars($row['food_id']); ?>">
+                    <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order_id); ?>">
+                    <button type="submit" name="delete_food" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </td>
             </tr>
           <?php } ?>
         </tbody>
