@@ -26,7 +26,7 @@
         $points = intval($_POST['points']);
         
         // Giả sử bạn có một tài khoản sẵn có để sử dụng cho khách hàng
-        $account_id = 13; // Thay đổi tùy theo tài khoản thực tế trong bảng account
+        $customer_id = 13; // Thay đổi tùy theo tài khoản thực tế trong bảng account
 
         // Kiểm tra dữ liệu
         if (!preg_match('/^\d{10}$/', $phone_number)) {
@@ -44,12 +44,19 @@
             return;
         }
 
-        $insert_query = "INSERT INTO customer (customer_first_name, customer_last_name, phone_number, email, points, customer_id) VALUES ('$first_name', '$last_name', '$phone_number', '$email', $points, $account_id)";
-        
-        if (mysqli_query($connect, $insert_query)) {
-            echo "<script>alert('Thêm khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+        // Use prepared statements to prevent SQL injection
+        $insert_query = "CALL InsertCustomer(?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connect, $insert_query);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "issssi", $customer_id, $first_name, $last_name, $phone_number, $email, $points);
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<script>alert('Thêm khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+            } else {
+                echo "<script>alert('Lỗi thêm khách hàng: " . mysqli_stmt_error($stmt) . "');</script>";
+            }
+            mysqli_stmt_close($stmt);
         } else {
-            echo "<script>alert('Lỗi thêm khách hàng: " . mysqli_error($connect) . "');</script>";
+            echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
         }
     }
 
@@ -63,23 +70,38 @@
         $points = intval($_POST['points']);
     
         // Use prepared statements to prevent SQL injection
-        $update_query = "UPDATE customer SET customer_first_name='$first_name', customer_last_name='$last_name', phone_number='$phone_number', email='$email', points=$points WHERE customer_id=$customer_id";
-        if (mysqli_query($connect, $update_query)) {
-            echo "<script>alert('Sửa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+        $update_query = "CALL UpdateCustomer(?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connect, $update_query);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "issssi", $customer_id, $first_name, $last_name, $phone_number, $email, $points);
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<script>alert('Sửa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+            } else {
+                echo "<script>alert('Lỗi sửa khách hàng: " . mysqli_stmt_error($stmt) . "');</script>";
+            }
+            mysqli_stmt_close($stmt);
         } else {
-            echo "<script>alert('Lỗi sửa khách hàng: " . $customer_id . "');</script>";
+            echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
         }
     }
 
     // Xử lý xóa khách hàng
     if (isset($_POST['delete_customer'])) {
         $customer_id = intval($_POST['customer_id']);
-        $delete_query = "DELETE FROM customer WHERE customer_id=$customer_id";
-        
-        if (mysqli_query($connect, $delete_query)) {
-            echo "<script>alert('Xóa khách hàng thành công!'); window.location.reload();</script>";
+
+        // Use prepared statements to prevent SQL injection
+        $delete_query = "CALL DeleteCustomer(?)";
+        $stmt = mysqli_prepare($connect, $delete_query);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "i", $customer_id);
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<script>alert('Xóa khách hàng thành công!'); window.location.href = 'admin_manager_user.php';</script>";
+            } else {
+                echo "<script>alert('Lỗi xóa khách hàng: " . mysqli_stmt_error($stmt) . "');</script>";
+            }
+            mysqli_stmt_close($stmt);
         } else {
-            echo "<script>alert('Lỗi xóa khách hàng: " . mysqli_error($connect) . "');</script>";
+            echo "<script>alert('Lỗi chuẩn bị truy vấn: " . mysqli_error($connect) . "');</script>";
         }
     }
 
